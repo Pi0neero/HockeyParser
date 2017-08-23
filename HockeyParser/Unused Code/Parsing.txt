@@ -1,0 +1,99 @@
+ public static ExpandedStandings retrieveExpanedStandings(String url) throws IOException {
+
+        Document doc = Jsoup.connect(url).get();
+        Elements eles = doc.getElementsByClass("table_outer_container");
+
+        Element table = eles.get(2);
+        Elements body = table.select("#standings > tbody");
+
+        ExpandedStandings expandedStandings = new ExpandedStandings();
+
+        for (Element e : body) {
+            int index = 1;
+            for (Element row : e.select("tr")) {
+
+                Elements td = row.select("td");
+
+                Team team = new Team(index, td.get(0).text());
+                team.setOverallRecord(td.get(1).text());
+                team.setHomeRecord(td.get(2).text());
+                team.setAwayRecord(td.get(3).text());
+                team.setEastRecord(td.get(4).text());
+                team.setWestRecord(td.get(5).text());
+                team.setAtlanticRecord(td.get(6).text());
+                team.setMetroRecord(td.get(7).text());
+                team.setCentralRecord(td.get(8).text());
+                team.setPacificRecord(td.get(9).text());
+                team.setOneOrFewerGoalsRecord(td.get(10).text());
+                team.setThreeOrMoreGoalsRecord(td.get(11).text());
+
+                String[] months = {"Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr"};
+
+                team.addMonthRecord("Oct", td.get(12).text());
+                team.addMonthRecord("Nov", td.get(13).text());
+                team.addMonthRecord("Dec", td.get(14).text());
+                team.addMonthRecord("Jan", td.get(15).text());
+                team.addMonthRecord("Feb", td.get(16).text());
+                team.addMonthRecord("Mar", td.get(17).text());
+                team.addMonthRecord("Apr", td.get(18).text());
+
+                expandedStandings.addTeam(td.get(0).text(), team);
+                index++;
+
+            }
+
+        }
+        return expandedStandings;
+    }
+
+    public static void retrievePlayerStatsStandard() throws IOException {
+
+        Document doc = Jsoup.connect("https://www.hockey-reference.com/players/p/paveljo01.html").get();
+        Elements eles = doc.select("#stats_basic_plus_nhl > tbody");
+
+        for (Element item : eles) {
+
+            Elements rows = item.select("tr");
+
+            for (int i = 0; i < rows.size(); i++) {
+                Element tr = rows.get(i);
+
+                Element th = tr.select("th").get(0);
+                String season = th.text();
+
+                Elements td = tr.select("td");
+
+                String age = td.get(0).text();
+                String team = td.get(1).text();
+                String league = td.get(2).text();
+                String gamesPlayed = td.get(3).text();
+                String goals = td.get(4).text();
+                String assists = td.get(5).text();
+                String points = td.get(6).text();
+                String plusMinus = td.get(7).text();
+                String penaltiesInMinutes = td.get(8).text();
+                String evenStrengthGoals = td.get(9).text();
+                String powerPlayGoals = td.get(10).text();
+                String shortHandedGoals = td.get(11).text();
+                String gameWinningGoals = td.get(12).text();
+                String evenStrengthAssists = td.get(13).text();
+                String powerPlayAssists = td.get(14).text();
+                String shortHandedAssists = td.get(15).text();
+                String shotsOnGoal = td.get(16).text();
+                String shootingPercentage = td.get(17).text();
+                String totalShotsAttempted = td.get(18).text();
+                String timeOnIce = td.get(19).text();
+                String averageTimeOnIce = td.get(20).text();
+                String faceOffWins = td.get(21).text();
+                String faceOffLosses = td.get(22).text();
+                String faceOffWinPercentageEvenStrength = td.get(23).text();
+                String hitsEvenStrength = td.get(24).text();
+                String blocksEvenStrength = td.get(25).text();
+                String takeAways = td.get(26).text();
+                String giveAways = td.get(27).text();
+                String awards = td.get(28).text();
+
+            }
+
+        }
+    }
